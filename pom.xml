@@ -1,78 +1,177 @@
-<?xml version="1.0"?>
-<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<?xml version="1.0" encoding="UTF-8"?>
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd"
+         xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.taskmanager</groupId>
   <artifactId>reactive-task-manager</artifactId>
-  <version>1.0.0-SNAPSHOT</version>
+  <version>1.0.0</version>
+
   <properties>
-    <compiler-plugin.version>3.14.0</compiler-plugin.version>
-    <maven.compiler.release>11</maven.compiler.release>
+    <!-- Java Version -->
+    <maven.compiler.source>17</maven.compiler.source>
+    <maven.compiler.target>17</maven.compiler.target>
+    <maven.compiler.release>17</maven.compiler.release>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+
+    <!-- Quarkus Platform  -->
     <quarkus.platform.artifact-id>quarkus-bom</quarkus.platform.artifact-id>
-    <quarkus.platform.group-id>io.quarkus.platform</quarkus.platform.group-id>
-    <quarkus.platform.version>3.25.4</quarkus.platform.version>
+    <quarkus.platform.group-id>io.quarkus</quarkus.platform.group-id>
+    <quarkus.platform.version>3.8.1</quarkus.platform.version>
+
+    <!-- Plugin Versions -->
+    <compiler-plugin.version>3.14.0</compiler-plugin.version>
+    <surefire-plugin.version>3.2.5</surefire-plugin.version>
+    <failsafe-plugin.version>3.2.5</failsafe-plugin.version>
+    <owasp-plugin.version>12.1.0</owasp-plugin.version>
+
+    <!-- TestContainers -->
+    <testcontainers.version>1.21.3</testcontainers.version>
+
+    <!-- Build Properties -->
     <skipITs>true</skipITs>
-    <surefire-plugin.version>3.5.3</surefire-plugin.version>
+    <surefire.useModulePath>false</surefire.useModulePath>
   </properties>
+
   <dependencyManagement>
     <dependencies>
+      <!-- Quarkus -->
       <dependency>
-        <groupId>${quarkus.platform.group-id}</groupId>
-        <artifactId>${quarkus.platform.artifact-id}</artifactId>
+        <groupId>io.quarkus</groupId>
+        <artifactId>quarkus-bom</artifactId>
         <version>${quarkus.platform.version}</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+
+      <!-- TestContainers -->
+      <dependency>
+        <groupId>org.testcontainers</groupId>
+        <artifactId>testcontainers-bom</artifactId>
+        <version>${testcontainers.version}</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
     </dependencies>
   </dependencyManagement>
+
   <dependencies>
+    <!-- CORE REACTIVE DEPENDENCIES -->
+
+    <!-- Quarkus REST -->
     <dependency>
       <groupId>io.quarkus</groupId>
-      <artifactId>quarkus-arc</artifactId>
+      <artifactId>quarkus-resteasy-reactive</artifactId>
     </dependency>
+
+    <!-- Jackson JSON processing -->
     <dependency>
       <groupId>io.quarkus</groupId>
-      <artifactId>quarkus-rest</artifactId>
+      <artifactId>quarkus-resteasy-reactive-jackson</artifactId>
     </dependency>
+
+    <!-- DATABASE REACTIVE -->
+
+    <!-- Hibernate Reactive Panache - ORM reactive -->
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-hibernate-reactive-panache</artifactId>
+    </dependency>
+
+    <!-- PostgreSQL Reactive Driver -->
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-reactive-pg-client</artifactId>
+    </dependency>
+
+    <!-- VALIDATION & SECURITY -->
+
+    <!-- Bean Validation input validation -->
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-hibernate-validator</artifactId>
+    </dependency>
+
+    <!-- UTILITIES -->
+
+    <!-- Configuration properties -->
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-config-yaml</artifactId>
+    </dependency>
+
+    <!-- Health checks monitoring -->
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-smallrye-health</artifactId>
+    </dependency>
+
+    <!-- OpenAPI/Swagger documentation API -->
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-smallrye-openapi</artifactId>
+    </dependency>
+
+    <!-- Logging -->
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-logging-json</artifactId>
+    </dependency>
+
+    <!-- TESTING DEPENDENCIES -->
+
+    <!-- Quarkus Test Framework -->
     <dependency>
       <groupId>io.quarkus</groupId>
       <artifactId>quarkus-junit5</artifactId>
       <scope>test</scope>
     </dependency>
+
+    <!-- REST Assured REST endpoints -->
     <dependency>
       <groupId>io.rest-assured</groupId>
       <artifactId>rest-assured</artifactId>
       <scope>test</scope>
     </dependency>
+
+    <!-- TestContainers  -->
     <dependency>
-      <groupId>io.quarkus</groupId>
-      <artifactId>quarkus-resteasy-reactive-jackson</artifactId>
+      <groupId>org.testcontainers</groupId>
+      <artifactId>junit-jupiter</artifactId>
+      <scope>test</scope>
     </dependency>
+
     <dependency>
-      <groupId>io.quarkus</groupId>
-      <artifactId>quarkus-hibernate-reactive-panache</artifactId>
+      <groupId>org.testcontainers</groupId>
+      <artifactId>postgresql</artifactId>
+      <scope>test</scope>
     </dependency>
+
+    <!-- Reactive testing utilities -->
     <dependency>
-      <groupId>io.quarkus</groupId>
-      <artifactId>quarkus-reactive-pg-client</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>io.quarkus</groupId>
-      <artifactId>quarkus-arc</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>io.quarkus</groupId>
-      <artifactId>quarkus-hibernate-validator</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>io.quarkus</groupId>
-      <artifactId>quarkus-smallrye-openapi</artifactId>
+      <groupId>io.smallrye.reactive</groupId>
+      <artifactId>mutiny-test-utils</artifactId>
+      <scope>test</scope>
     </dependency>
   </dependencies>
+
   <build>
     <plugins>
+      <!-- Maven Compiler Plugin -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>${compiler-plugin.version}</version>
+        <configuration>
+          <release>17</release>
+          <compilerArgs>
+            <arg>-parameters</arg>
+          </compilerArgs>
+        </configuration>
+      </plugin>
+
+      <!-- Quarkus Maven Plugin -->
       <plugin>
         <groupId>${quarkus.platform.group-id}</groupId>
         <artifactId>quarkus-maven-plugin</artifactId>
@@ -88,15 +187,8 @@
           </execution>
         </executions>
       </plugin>
-      <plugin>
-        <artifactId>maven-compiler-plugin</artifactId>
-        <version>${compiler-plugin.version}</version>
-        <configuration>
-          <compilerArgs>
-            <arg>-parameters</arg>
-          </compilerArgs>
-        </configuration>
-      </plugin>
+
+      <!-- Surefire Plugin unit tests -->
       <plugin>
         <artifactId>maven-surefire-plugin</artifactId>
         <version>${surefire-plugin.version}</version>
@@ -106,26 +198,32 @@
           </systemPropertyVariables>
         </configuration>
       </plugin>
+
+      <!-- Failsafe Plugin untuk integration tests -->
       <plugin>
         <artifactId>maven-failsafe-plugin</artifactId>
-        <version>${surefire-plugin.version}</version>
+        <version>${failsafe-plugin.version}</version>
         <executions>
           <execution>
             <goals>
               <goal>integration-test</goal>
               <goal>verify</goal>
             </goals>
+            <configuration>
+              <systemPropertyVariables>
+                <native.image.path>${project.build.directory}/${project.build.finalName}-runner</native.image.path>
+                <java.util.logging.manager>org.jboss.logmanager.LogManager</java.util.logging.manager>
+              </systemPropertyVariables>
+            </configuration>
           </execution>
         </executions>
-        <configuration>
-          <systemPropertyVariables>
-            <native.image.path>${project.build.directory}/${project.build.finalName}-runner</native.image.path>
-            <java.util.logging.manager>org.jboss.logmanager.LogManager</java.util.logging.manager>
-          </systemPropertyVariables>
-        </configuration>
       </plugin>
+
     </plugins>
   </build>
+
+
+  <!-- Profiles untuk different environments -->
   <profiles>
     <profile>
       <id>native</id>
